@@ -165,29 +165,29 @@ def main():
         os.system("clear")
         print(board)
 
+        # Computer move
+        print("Computer is thinking...")
+        cpu_move = loaded_model.minimax(board, 6, True, float("-inf"), float("inf"))
+        print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
+        board.place(cpu_move[1], Board.X)
+
         # # Computer move
         # print("Computer is thinking...")
         # cpu_move = loaded_model2.minimax(board, 6, True, float("-inf"), float("inf"))
         # print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
         # board.place(cpu_move[1], Board.X)
+        
+        os.system("clear")
+        print(board)
 
         # Player move
         col = int(input("COL: "))
         col = min(7, max(1, col)) # Only columns 1 - 7
         if board.is_column_free(col - 1):
-            board.place(col - 1, Board.X) # Place piece at the selected column
+            board.place(col - 1, Board.O) # Place piece at the selected column
         else:
             print(f"Column {col - 1} is not free. Please choose another one.")
             continue
-        
-        os.system("clear")
-        print(board)
-
-        # Computer move
-        print("Computer is thinking...")
-        cpu_move = loaded_model.minimax(board, 6, False, float("-inf"), float("inf"))
-        print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
-        board.place(cpu_move[1], Board.O)
 
     # End of game
     print(board)
