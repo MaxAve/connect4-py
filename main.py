@@ -97,9 +97,9 @@ def main():
     for _ in range(offspring_population_size):
         active_models.append(model)
 
-    winner_model = None
+    winner_model = active_models[0]
 
-    for r in range(10):
+    for r in range(20):
         print(f"Starting round {r+1}.")
 
         score_tally = [0] * len(active_models)
@@ -148,11 +148,12 @@ def main():
         #     break
 
     # Save the model
-    torch.save(winner_model.state_dict(), "/home/maxave/Desktop/connect4-py/models/nn-3.pth")
+    torch.save(winner_model.state_dict(), "/home/maxave/Desktop/connect4-py/models/nn-4")
+    return
     '''
 
     loaded_model = neural_network.NN()
-    loaded_model.load_state_dict(torch.load("models/nn-3"))
+    loaded_model.load_state_dict(torch.load("models/nn-4"))
     loaded_model.eval()
 
     # loaded_model2 = neural_network.NN()
