@@ -53,7 +53,7 @@ class Board:
                         return col[row]
         # -
         for row in range(6):
-            for col in range(3):
+            for col in range(4):
                 if self.board[col][row] != Board.NONE:
                     if self.board[col][row] == self.board[col + 1][row] == self.board[col + 2][row] == self.board[col + 3][row]:
                         return self.board[col][row]
@@ -65,7 +65,7 @@ class Board:
                         return self.board[col][row]
         # \
         for row in range(3):
-            for col in range(3):
+            for col in range(4):
                 if self.board[col][row] != Board.NONE:
                     if self.board[col][row] == self.board[col + 1][row + 1] == self.board[col + 2][row + 2] == self.board[col + 3][row + 3]:
                         return self.board[col][row]
