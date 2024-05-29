@@ -156,9 +156,9 @@ def main():
     loaded_model.load_state_dict(torch.load("models/nn-4"))
     loaded_model.eval()
 
-    # loaded_model2 = neural_network.NN()
-    # loaded_model2.load_state_dict(torch.load("models/nn-1"))
-    # loaded_model2.eval()
+    loaded_model2 = neural_network.NN()
+    loaded_model2.load_state_dict(torch.load("models/nn-1"))
+    loaded_model2.eval()
 
     # Player vs AI
     while board.get_winner() == Board.NONE and board.is_draw() == False:
@@ -168,17 +168,21 @@ def main():
         # Computer move
         print("Computer is thinking...")
         cpu_move = loaded_model.minimax(board, 6, True, float("-inf"), float("inf"))
-        print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
         board.place(cpu_move[1], Board.X)
 
-        # # Computer move
-        # print("Computer is thinking...")
-        # cpu_move = loaded_model2.minimax(board, 6, True, float("-inf"), float("inf"))
-        # print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
-        # board.place(cpu_move[1], Board.X)
-        
         os.system("clear")
         print(board)
+
+        # Computer move
+        # print("Computer is thinking...")
+        # cpu_move = loaded_model2.minimax(board, 6, False, float("-inf"), float("inf"))
+        # print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
+        # board.place(cpu_move[1], Board.O)
+        
+        # if not (board.get_winner() == Board.NONE and board.is_draw() == False):
+        #     break
+
+        # print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
 
         # Player move
         col = int(input("COL: "))

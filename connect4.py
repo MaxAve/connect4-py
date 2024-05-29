@@ -46,11 +46,11 @@ class Board:
     
     def get_winner(self):
         # |
-        for col in self.board:
+        for col in range(7):
             for row in range(3):
-                if col[row] != Board.NONE:
-                    if col[row] == col[row + 1] == col[row + 2] == col[row + 3]:
-                        return col[row]
+                if self.board[col][row] != Board.NONE:
+                    if self.board[col][row] == self.board[col][row + 1] == self.board[col][row + 2] == self.board[col][row + 3]:
+                        return self.board[col][row]
         # -
         for row in range(6):
             for col in range(4):
