@@ -92,7 +92,7 @@ def main():
     # Create initial population
     active_models = []
     model = neural_network.NN()
-    model.load_state_dict(torch.load("models/nn-1.pth"))
+    model.load_state_dict(torch.load("models/nn-3"))
     model.eval()
     for _ in range(offspring_population_size):
         active_models.append(model)
@@ -152,13 +152,23 @@ def main():
     '''
 
     loaded_model = neural_network.NN()
-    loaded_model.load_state_dict(torch.load("models/nn-3.pth"))
+    loaded_model.load_state_dict(torch.load("models/nn-3"))
     loaded_model.eval()
+
+    # loaded_model2 = neural_network.NN()
+    # loaded_model2.load_state_dict(torch.load("models/nn-1"))
+    # loaded_model2.eval()
 
     # Player vs AI
     while board.get_winner() == Board.NONE and board.is_draw() == False:
         os.system("clear")
         print(board)
+
+        # # Computer move
+        # print("Computer is thinking...")
+        # cpu_move = loaded_model2.minimax(board, 6, True, float("-inf"), float("inf"))
+        # print(f"Deep eval: {cpu_move[0]}\nBest move: {cpu_move[1]}")
+        # board.place(cpu_move[1], Board.X)
 
         # Player move
         col = int(input("COL: "))

@@ -32,7 +32,7 @@ class Board:
     
     def get_free_columns(self):
         fcols = []
-        for col in range(6):
+        for col in range(7):
             if self.is_column_free(col):
                 fcols.append(col)
         return fcols
