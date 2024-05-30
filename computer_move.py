@@ -1,11 +1,20 @@
 from connect4 import *
 from copy import deepcopy
 
-evlauation_function = None
+occupation_eval = [[1,    1,    1,    1,    1,    1   ],
+                   [1.25, 1.25, 1.25, 1.25, 1.25, 1.25],
+                   [1.75, 1.75, 1.75, 1.75, 1.75, 1.75],
+                   [2,    2,    2,    2,    2,    2   ],
+                   [1.75, 1.75, 1.75, 1.75, 1.75, 1.75],
+                   [1.25, 1.25, 1.25, 1.25, 1.25, 1.25],
+                   [1,    1,    1,    1,    1,    1   ]]
 
-def set_evaluation_function(func):
-    global evlauation_function
-    evlauation_function = func
+def eval(board):
+    e = 0
+    for row in range(7):
+        for col in range(6):
+            e += occupation_eval[row][col] * board.board[row][col]
+    return e
 
 def minimax(board, depth, maximizing, alpha, beta):
     if board.is_draw():
@@ -15,7 +24,7 @@ def minimax(board, depth, maximizing, alpha, beta):
         if winner != Board.NONE:
             return [(1000000 + depth) * winner, 0]
     if depth == 0:
-        return [evlauation_function(board), 0]
+        return [eval(board), 0]
     
     if maximizing:
         best_val = float("-inf")
