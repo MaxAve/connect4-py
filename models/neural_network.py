@@ -69,7 +69,7 @@ class NN(nn.Module):
                 beta = min(beta, best_val)
                 if beta <= alpha:
                     break
-        return [best_val, best_move]
+        return (best_val, best_move)
 
 # Crosser over two models with the resulting model having a mix of parameters from both parent models
 def crossover(model1: NN, model2: NN):

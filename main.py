@@ -59,6 +59,26 @@ def model_vs_heuristic(model, game_id, model_plays_as_x=True):
     return score
 
 
+def model_vs_model(model1, model2, depth, debug=False):
+    board = Board()
+    moves_played = 0
+    while board.get_winner() == Board.NONE and board.is_draw() == False:
+        if debug:
+            print(board)
+        # Computer move (neural network)
+        best_move = model1.minimax(board, depth, True, float("-inf"), float("inf"))
+        board.place(best_move[1], Board.X)
+        if debug:
+            print(board)
+        if not (board.get_winner() == Board.NONE and board.is_draw() == False):
+            break
+        # Computer move (heuristics)
+        best_move = model2.minimax(board, depth, False, float("-inf"), float("inf"))
+        board.place(best_move[1], Board.O)
+        moves_played += 1
+    return (board.get_winner(), moves_played)
+
+
 def train(generations, survivor_population_size, mutation, name, sample=None):
     offspring_population_size = survivor_population_size * (survivor_population_size - 1)
     total_generation_size = survivor_population_size + offspring_population_size
@@ -126,7 +146,7 @@ def train(generations, survivor_population_size, mutation, name, sample=None):
             max_score = model.fitness_score
             winner_model = model
     print(f"Saving model as {name}...")
-    torch.save(winner_model.state_dict(), f"/home/maxave/Desktop/connect4-py/models_v2/{name}")
+    torch.save(winner_model.state_dict(), f"/home/maxave/Desktop/connect4-py/models/{name}")
 
 
 def play_against(model):
@@ -154,11 +174,15 @@ def play_against(model):
     print("YOU LOST!" if board.get_winner() == Board.X else ("YOU WIN!" if board.get_winner() == Board.O else "IT'S A DRAW!"))
 
 def main():
-    model = neural_network.NN()
-    model.load_state_dict(torch.load("/home/maxave/Desktop/connect4-py/models/connect4-eval-05-31-2024_13:07:17"))
-    model.eval()
-    play_against(model=model)
-    # train(10, 5, 0.1, f"connect4-eval-{datetime.now().strftime('%m-%d-%Y_%H:%M:%S')}")
+    model1 = neural_network.NN()
+    model1.load_state_dict(torch.load("/home/maxave/Desktop/connect4-py/models/connect4-eval-05-31-2024_13:07:17"))
+    model1.eval()
+    model2 = neural_network.NN()
+    model2.load_state_dict(torch.load("/home/maxave/Desktop/connect4-py/models/connect4-eval-05-31-2024_14:06:24"))
+    model2.eval()
+    model_vs_model(model2, model1, 6, True)
+    # play_against(model=model)
+    #train(10, 5, 0.1, f"connect4-eval-{datetime.now().strftime('%m-%d-%Y_%H:%M:%S')}", sample=model)
 
 if __name__ == "__main__":
     main()
