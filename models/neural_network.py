@@ -7,9 +7,9 @@ from copy import deepcopy
 class NN(nn.Module):
     def __init__(self):
         super().__init__()
-        self.flatten = nn.Flatten()
-        self.linear_lrelu_stack = nn.Sequential(
-            nn.Linear(84, 20),
+        self.fitness_score = None
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear((7*6) * 2, 20),
             nn.ReLU(),
             nn.Linear(20, 20),
             nn.ReLU(),
@@ -24,8 +24,8 @@ class NN(nn.Module):
         bt = torch.tensor(board.board)
         p1 = (bt + abs(bt)) / 2             # Board filtered for player 1 pieces
         p2 = abs(bt) - ((bt + abs(bt)) / 2) # Board filtered for player 2 pieces
-        x = self.flatten(torch.cat((p1, p2), 0).to(torch.float32))
-        logits = self.linear_lrelu_stack(x)
+        x = torch.flatten(torch.cat((p1, p2)))
+        logits = self.linear_relu_stack(x)
         return logits
     
     def mutate(self, mut_range):
@@ -40,8 +40,8 @@ class NN(nn.Module):
             if winner != Board.NONE:
                 return [(1000000 + depth) * winner, 0]
         if depth == 0:
-            eval = self.forward(board).tolist()[0]
-            return [eval[0] + eval[1], 0]
+            eval = self.forward(board)
+            return [eval[0] - eval[1], 0]
         
         if maximizing:
             best_val = float("-inf")
@@ -71,12 +71,21 @@ class NN(nn.Module):
                     break
         return [best_val, best_move]
 
-def crossover(model1, model2):
+# Crosser over two models with the resulting model having a mix of parameters from both parent models
+def crossover(model1: NN, model2: NN):
     result_model = NN()
     for param1, param2, res_param in zip(model1.parameters(), model2.parameters(), result_model.parameters()):
-        shape = param1.shape
-        for i in range(shape[0]):
-            for j in range(shape[1]):
-                for k in range(shape[2]):
-                    res_param[i, j, k] = random.choice([param1[i, j, k], param2[i, j, k]])
+        shape = param1.data.shape
+        if len(shape) == 1:
+            for i in range(shape[0]):
+                res_param.data[i] = random.choice([param1.data[i], param2.data[i]])
+        elif len(shape) == 2:
+            for i in range(shape[0]):
+                for j in range(shape[1]):
+                    res_param.data[i, j] = random.choice([param1.data[i, j], param2.data[i, j]])
+        elif len(shape) == 3:
+            for i in range(shape[0]):
+                for j in range(shape[1]):
+                    for k in range(shape[2]):
+                        res_param.data[i, j, k] = random.choice([param1.data[i, j, k], param2.data[i, j, k]])
     return result_model
