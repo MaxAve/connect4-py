@@ -4,7 +4,7 @@ import computer_move
 import torch
 import random
 from datetime import datetime
-from models_v2 import neural_network
+from models import neural_network
 
 # Plays a game between the given AI and a preprogrammed heristic model
 # Returns a result between -1 and 1 based on how well the model performed
