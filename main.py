@@ -155,7 +155,7 @@ def play_against(model):
 
 def main():
     model = neural_network.NN()
-    model.load_state_dict(torch.load("/home/maxave/Desktop/connect4-py/models_v2/connect4-eval-05-31-2024_13:07:17"))
+    model.load_state_dict(torch.load("/home/maxave/Desktop/connect4-py/models/connect4-eval-05-31-2024_13:07:17"))
     model.eval()
     play_against(model=model)
     # train(10, 5, 0.1, f"connect4-eval-{datetime.now().strftime('%m-%d-%Y_%H:%M:%S')}")
